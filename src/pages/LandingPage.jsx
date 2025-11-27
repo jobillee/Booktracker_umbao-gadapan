@@ -4,11 +4,6 @@ export default function LandingPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  const closeModals = () => {
-    setShowLogin(false);
-    setShowSignup(false);
-  };
-
   const handleLogin = (e) => {
     e.preventDefault();
     // Add your login logic here
@@ -21,19 +16,24 @@ export default function LandingPage() {
     console.log('Signup submitted');
   };
 
+  const switchToSignup = () => {
+    setShowLogin(false);
+    setShowSignup(true);
+  };
+
+  const switchToLogin = () => {
+    setShowSignup(false);
+    setShowLogin(true);
+  };
+
   return (
     <div 
-      className="w-screen min-h-screen flex flex-col" 
+      className="w-full min-h-screen flex flex-col" 
       style={{ 
         backgroundColor: '#faf3e0', 
         overflow: 'auto',
         margin: 0,
-        padding: 0,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
+        padding: 0
       }}
     >
       {/* Header */}
@@ -41,9 +41,8 @@ export default function LandingPage() {
         className="w-full py-3 md:py-4 px-4 md:px-6 flex items-center justify-between" 
         style={{ backgroundColor: '#6b4f4f', flexShrink: 0 }}
       >
-        {/* Logo on the left */}
         <div className="flex items-center">
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center">
+          <div className="w-20 h-20 md:w-12 md:h-12 rounded-lg flex items-center justify-center">
             <img src="logo.png" alt="Logo" className="object-contain w-full h-full" />
           </div>
           <span 
@@ -54,7 +53,6 @@ export default function LandingPage() {
           </span>
         </div>
 
-        {/* Auth buttons on the right */}
         <div className="flex gap-2 md:gap-3">
           <button 
             onClick={() => setShowLogin(true)}
@@ -87,17 +85,15 @@ export default function LandingPage() {
         className="flex-1 flex flex-col items-center justify-center px-4 md:px-6 py-8 md:py-0" 
         style={{ minHeight: 'calc(100vh - 64px)' }}
       >
-        {/* Centered Logo */}
         <div className="mb-6 md:mb-8">
           <div 
-            className="w-24 h-24 md:w-32 md:h-32 rounded-2xl flex items-center justify-center shadow-2xl" 
+            className="w-64 h-64 md:w-80 md:h-80 rounded-2xl flex items-center justify-center shadow-2xl" 
             style={{ backgroundColor: '#6b4f4f' }}
           >
-            <img src="logo.png" alt="Logo" className="object-contain w-16 h-16 md:w-20 md:h-20" />
+            <img src="logo.png" alt="Logo" className="object-contain w-48 h-48 md:w-64 md:h-64" />
           </div>
         </div>
 
-        {/* Tagline */}
         <p 
           className="text-lg md:text-xl lg:text-2xl text-center max-w-2xl leading-relaxed px-4"
           style={{ 
@@ -112,31 +108,25 @@ export default function LandingPage() {
       {/* Login Modal */}
       {showLogin && (
         <div 
-          className="fixed inset-0 flex items-center justify-center z-50 px-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onClick={closeModals}
+          className="fixed inset-0 flex items-center justify-center p-4"
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 50
+          }}
+          onClick={() => setShowLogin(false)}
         >
           <div 
-            className="w-full max-w-md rounded-2xl shadow-2xl p-6 md:p-8"
+            className="w-full max-w-md p-6 md:p-8 rounded-2xl shadow-2xl"
             style={{ backgroundColor: '#faf3e0' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-6">
-              <h2 
-                className="text-2xl font-bold"
-                style={{ color: '#6b4f4f', fontFamily: 'Quicksand, sans-serif' }}
-              >
-                Welcome Back
-              </h2>
-              <button 
-                onClick={closeModals}
-                className="text-2xl leading-none hover:opacity-70"
-                style={{ color: '#6b4f4f' }}
-              >
-                ×
-              </button>
-            </div>
-
+            <h2 
+              className="text-2xl md:text-3xl font-bold mb-6 text-center"
+              style={{ fontFamily: 'Quicksand, sans-serif', color: '#6b4f4f' }}
+            >
+              Log In
+            </h2>
+            
             <div className="space-y-4">
               <div>
                 <label 
@@ -145,18 +135,18 @@ export default function LandingPage() {
                 >
                   Email
                 </label>
-                <input 
+                <input
                   type="email"
-                  className="w-full px-4 py-2 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  placeholder="input your email"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
                   style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
-                    backgroundColor: '#fff',
-                    fontFamily: 'Open Sans, sans-serif'
+                    backgroundColor: '#fff'
                   }}
-                  placeholder="your@email.com"
                 />
               </div>
-
+              
               <div>
                 <label 
                   className="block mb-2 text-sm font-medium"
@@ -164,46 +154,53 @@ export default function LandingPage() {
                 >
                   Password
                 </label>
-                <input 
+                <input
                   type="password"
-                  className="w-full px-4 py-2 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  placeholder="password"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
                   style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
-                    backgroundColor: '#fff',
-                    fontFamily: 'Open Sans, sans-serif'
+                    backgroundColor: '#fff'
                   }}
-                  placeholder="••••••••"
                 />
               </div>
 
-              <button 
+              <button
                 onClick={handleLogin}
-                className="w-full py-3 rounded-lg font-medium transition-all hover:opacity-90 mt-6"
+                className="w-full py-3 rounded-lg font-semibold transition-all hover:opacity-90 mt-6"
                 style={{ 
+                  fontFamily: 'Open Sans, sans-serif',
                   backgroundColor: '#6b4f4f',
-                  color: '#faf3e0',
-                  fontFamily: 'Open Sans, sans-serif'
+                  color: '#faf3e0'
                 }}
               >
                 Log In
               </button>
+
+              {/* Signup Link */}
+              <p className="text-center text-sm" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+                <span style={{ color: '#6b4f4f' }}>Don't have an account? </span>
+                <button
+                  onClick={switchToSignup}
+                  className="font-semibold hover:underline"
+                  style={{ color: '#eab308' }}
+                >
+                  Sign Up
+                </button>
+              </p>
             </div>
 
-            <p 
-              className="text-center mt-4 text-sm"
-              style={{ color: '#6b4f4f', fontFamily: 'Open Sans, sans-serif' }}
+            <button
+              onClick={() => setShowLogin(false)}
+              className="w-full mt-4 py-2 text-sm transition-all hover:opacity-70"
+              style={{ 
+                fontFamily: 'Open Sans, sans-serif',
+                color: '#6b4f4f'
+              }}
             >
-              Don't have an account?{' '}
-              <button 
-                onClick={() => {
-                  setShowLogin(false);
-                  setShowSignup(true);
-                }}
-                className="font-medium hover:underline"
-              >
-                Sign Up
-              </button>
-            </p>
+              Cancel
+            </button>
           </div>
         </div>
       )}
@@ -211,31 +208,25 @@ export default function LandingPage() {
       {/* Sign Up Modal */}
       {showSignup && (
         <div 
-          className="fixed inset-0 flex items-center justify-center z-50 px-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onClick={closeModals}
+          className="fixed inset-0 flex items-center justify-center p-4"
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 50
+          }}
+          onClick={() => setShowSignup(false)}
         >
           <div 
-            className="w-full max-w-md rounded-2xl shadow-2xl p-6 md:p-8"
+            className="w-full max-w-md p-6 md:p-8 rounded-2xl shadow-2xl"
             style={{ backgroundColor: '#faf3e0' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-6">
-              <h2 
-                className="text-2xl font-bold"
-                style={{ color: '#6b4f4f', fontFamily: 'Quicksand, sans-serif' }}
-              >
-                Join BookHive
-              </h2>
-              <button 
-                onClick={closeModals}
-                className="text-2xl leading-none hover:opacity-70"
-                style={{ color: '#6b4f4f' }}
-              >
-                ×
-              </button>
-            </div>
-
+            <h2 
+              className="text-2xl md:text-3xl font-bold mb-6 text-center"
+              style={{ fontFamily: 'Quicksand, sans-serif', color: '#6b4f4f' }}
+            >
+              Sign Up
+            </h2>
+            
             <div className="space-y-4">
               <div>
                 <label 
@@ -244,15 +235,15 @@ export default function LandingPage() {
                 >
                   Full Name
                 </label>
-                <input 
+                <input
                   type="text"
-                  className="w-full px-4 py-2 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  placeholder="Input your fullname"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
                   style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
-                    backgroundColor: '#fff',
-                    fontFamily: 'Open Sans, sans-serif'
+                    backgroundColor: '#fff'
                   }}
-                  placeholder="John Doe"
                 />
               </div>
 
@@ -263,15 +254,34 @@ export default function LandingPage() {
                 >
                   Email
                 </label>
-                <input 
+                <input
                   type="email"
-                  className="w-full px-4 py-2 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  placeholder="Input your email"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
                   style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
-                    backgroundColor: '#fff',
-                    fontFamily: 'Open Sans, sans-serif'
+                    backgroundColor: '#fff'
                   }}
-                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <label 
+                  className="block mb-2 text-sm font-medium"
+                  style={{ color: '#6b4f4f', fontFamily: 'Open Sans, sans-serif' }}
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Input your password"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
+                    borderColor: '#6b4f4f',
+                    backgroundColor: '#fff'
+                  }}
                 />
               </div>
 
@@ -280,48 +290,78 @@ export default function LandingPage() {
                   className="block mb-2 text-sm font-medium"
                   style={{ color: '#6b4f4f', fontFamily: 'Open Sans, sans-serif' }}
                 >
-                  Password
+                  Confirm Password
                 </label>
-                <input 
+                <input
                   type="password"
-                  className="w-full px-4 py-2 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  placeholder="Confirm password"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
                   style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
-                    backgroundColor: '#fff',
-                    fontFamily: 'Open Sans, sans-serif'
+                    backgroundColor: '#fff'
                   }}
-                  placeholder="••••••••"
                 />
               </div>
 
-              <button 
+              <div>
+                <label 
+                  className="block mb-2 text-sm font-medium"
+                  style={{ color: '#6b4f4f', fontFamily: 'Open Sans, sans-serif' }}
+                >
+                  Role
+                </label>
+                <select
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  style={{ 
+                    fontFamily: 'Open Sans, sans-serif',
+                    borderColor: '#6b4f4f',
+                    backgroundColor: '#fff',
+                    color: '#6b4f4f'
+                  }}
+                  defaultValue=""
+                >
+                  <option value="" disabled>Choose Role (admin/borrower)</option>
+                  <option value="admin">Admin</option>
+                  <option value="borrower">Borrower</option>
+                </select>
+              </div>
+
+              <button
                 onClick={handleSignup}
-                className="w-full py-3 rounded-lg font-medium transition-all hover:opacity-90 mt-6"
+                className="w-full py-3 rounded-lg font-semibold transition-all hover:opacity-90 mt-6"
                 style={{ 
+                  fontFamily: 'Open Sans, sans-serif',
                   backgroundColor: '#6b4f4f',
-                  color: '#faf3e0',
-                  fontFamily: 'Open Sans, sans-serif'
+                  color: '#faf3e0'
                 }}
               >
-                Create Account
+                Sign Up
               </button>
+
+              {/* Login Link */}
+              <p className="text-center text-sm" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+                <span style={{ color: '#6b4f4f' }}>Already have an account? </span>
+                <button
+                  onClick={switchToLogin}
+                  className="font-semibold hover:underline"
+                  style={{ color: '#eab308' }}
+                >
+                  Login
+                </button>
+              </p>
             </div>
 
-            <p 
-              className="text-center mt-4 text-sm"
-              style={{ color: '#6b4f4f', fontFamily: 'Open Sans, sans-serif' }}
+            <button
+              onClick={() => setShowSignup(false)}
+              className="w-full mt-4 py-2 text-sm transition-all hover:opacity-70"
+              style={{ 
+                fontFamily: 'Open Sans, sans-serif',
+                color: '#6b4f4f'
+              }}
             >
-              Already have an account?{' '}
-              <button 
-                onClick={() => {
-                  setShowSignup(false);
-                  setShowLogin(true);
-                }}
-                className="font-medium hover:underline"
-              >
-                Log In
-              </button>
-            </p>
+              Cancel
+            </button>
           </div>
         </div>
       )}
