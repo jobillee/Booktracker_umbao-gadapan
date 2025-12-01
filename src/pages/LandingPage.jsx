@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";   // ADDED FOR REDIRECT
 
 export default function LandingPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
+  const navigate = useNavigate();   // ADDED
+
   const handleLogin = (e) => {
     e.preventDefault();
-    // Add your login logic here
     console.log('Login submitted');
+
+    // REDIRECT AFTER LOGIN
+    navigate("/dashboard");
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
-    // Add your signup logic here
     console.log('Signup submitted');
+
+    // REDIRECT AFTER SIGNUP
+    navigate("/dashboard");
   };
 
   const switchToSignup = () => {
@@ -47,7 +54,7 @@ export default function LandingPage() {
           </div>
           <span 
             className="ml-2 md:ml-3 text-lg md:text-xl font-bold" 
-            style={{ color: '#faf3e0', fontFamily: 'Quicksand, sans-serif' }}
+            style={{ color: '#faf3e0', fontFamily: 'Open Sans, sans-serif' }}
           >
             BookHive
           </span>
@@ -97,7 +104,7 @@ export default function LandingPage() {
         <p 
           className="text-lg md:text-xl lg:text-2xl text-center max-w-2xl leading-relaxed px-4"
           style={{ 
-            fontFamily: 'Quicksand, sans-serif',
+            fontFamily: 'Quicksand',
             color: '#6b4f4f'
           }}
         >
@@ -122,10 +129,17 @@ export default function LandingPage() {
           >
             <h2 
               className="text-2xl md:text-3xl font-bold mb-6 text-center"
-              style={{ fontFamily: 'Quicksand, sans-serif', color: '#6b4f4f' }}
+              style={{ fontFamily: 'Open Sans, sans-serif', color: '#6b4f4f' }}
             >
               Log In
             </h2>
+
+            <h4 
+              className="text-2l md:text-3l  mb-6 text-center"
+              style={{ fontFamily: 'Quicksand', color: '#6b4f4f' }}
+            >
+              Welcome back to BookHive! your trusted space for managing books, sales, and borrowings.
+            </h4>
             
             <div className="space-y-4">
               <div>
@@ -138,7 +152,7 @@ export default function LandingPage() {
                 <input
                   type="email"
                   placeholder="input your email"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -157,7 +171,7 @@ export default function LandingPage() {
                 <input
                   type="password"
                   placeholder="password"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -178,7 +192,6 @@ export default function LandingPage() {
                 Log In
               </button>
 
-              {/* Signup Link */}
               <p className="text-center text-sm" style={{ fontFamily: 'Open Sans, sans-serif' }}>
                 <span style={{ color: '#6b4f4f' }}>Don't have an account? </span>
                 <button
@@ -222,10 +235,17 @@ export default function LandingPage() {
           >
             <h2 
               className="text-2xl md:text-3xl font-bold mb-6 text-center"
-              style={{ fontFamily: 'Quicksand, sans-serif', color: '#6b4f4f' }}
+              style={{ fontFamily: 'Open Sans, san-serif', color: '#6b4f4f' }}
             >
               Sign Up
             </h2>
+
+            <h4 
+              className="text-2l md:text-3l  mb-6 text-center"
+              style={{ fontFamily: 'Quicksand', color: '#6b4f4f' }}
+            >
+              Welcome to BookHive, Your personal hub for books, sales, and borrowings.
+            </h4>
             
             <div className="space-y-4">
               <div>
@@ -238,7 +258,7 @@ export default function LandingPage() {
                 <input
                   type="text"
                   placeholder="Input your fullname"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -257,7 +277,7 @@ export default function LandingPage() {
                 <input
                   type="email"
                   placeholder="Input your email"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -276,7 +296,7 @@ export default function LandingPage() {
                 <input
                   type="password"
                   placeholder="Input your password"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -295,7 +315,7 @@ export default function LandingPage() {
                 <input
                   type="password"
                   placeholder="Confirm password"
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -312,7 +332,7 @@ export default function LandingPage() {
                   Role
                 </label>
                 <select
-                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none focus:border-opacity-70"
+                  className="w-full px-4 py-3 rounded-lg border-2 focus:outline-none"
                   style={{ 
                     fontFamily: 'Open Sans, sans-serif',
                     borderColor: '#6b4f4f',
@@ -339,7 +359,6 @@ export default function LandingPage() {
                 Sign Up
               </button>
 
-              {/* Login Link */}
               <p className="text-center text-sm" style={{ fontFamily: 'Open Sans, sans-serif' }}>
                 <span style={{ color: '#6b4f4f' }}>Already have an account? </span>
                 <button
