@@ -15,6 +15,8 @@ export default function BookHiveApp() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [userName, setUserName] = useState('John Doe');
   const [verificationCode, setVerificationCode] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showCheckoutNotification, setShowCheckoutNotification] = useState(false);
 
   const books = [
     {
@@ -69,7 +71,34 @@ export default function BookHiveApp() {
       genre: "Fiction",
       price: 26.99,
       year: 2018,
-      cover: "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=300&h=400&fit=crop"
+      cover: "https://cdn.gramedia.com/uploads/items/9786230033742_cover_Where_The_Crawdads_Sing.jpg"
+    },
+    {
+      id: 7,
+      title: "Before She was Found",
+      author: "Heather Gudenkauf",
+      genre: "Thriller, Mystery, Suspense, Crime, Fiction",
+      price: 6.49,
+      year: 2019,
+      cover: "https://m.media-amazon.com/images/I/71cb1d0LzdL._SY342_.jpg"
+    },
+    {
+      id: 8,
+      title: "One By One",
+      author: "Chris Carter",
+      genre: "Fiction, Thriller, Mystery, Suspense",
+      price: 9.99,
+      year: 2013,
+      cover: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9780857203076/one-by-one-9780857203076_hr.jp"
+    },
+    {
+      id: 9,
+      title: "One By One",
+      author: "Chris Carter",
+      genre: "Fiction, Thriller, Mystery, Suspense",
+      price: 9.99,
+      year: 2013,
+      cover: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9780857203076/one-by-one-9780857203076_hr.jp"
     }
   ];
 
@@ -97,6 +126,24 @@ export default function BookHiveApp() {
   };
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleCheckout = () => {
+    if (cartItems.length > 0) {
+      setShowCheckoutNotification(true);
+      setCartItems([]);
+      setCartOpen(false);
+      
+      setTimeout(() => {
+        setShowCheckoutNotification(false);
+      }, 3000);
+    }
+  };
+
+  const filteredBooks = books.filter(book =>
+    book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    book.genre.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -140,146 +187,254 @@ export default function BookHiveApp() {
           .font-quicksand {
             font-family: 'Quicksand', sans-serif;
           }
+
+          @keyframes slideDown {
+            from {
+              transform: translateY(-100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+
+          .notification-enter {
+            animation: slideDown 0.3s ease-out;
+          }
         `}
       </style>
 
-      {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50" style={{ backgroundColor: '#6b4f4f' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <h1 className="text-white text-2xl font-bold">📚 BookHive</h1>
+      {/* Checkout Notification */}
+      {showCheckoutNotification && (
+        <div 
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 notification-enter"
+          style={{ maxWidth: '90%', width: '400px' }}
+        >
+          <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="font-semibold">Checked out successfully!</span>
             </div>
-            
-            {/* Icons */}
-            <div className="flex items-center gap-4">
-              {currentPage === 'userinfo' && (
-                <button
-                  onClick={() => setCurrentPage('dashboard')}
-                  className="text-white hover:text-yellow-200 transition"
-                >
-                  <Home size={24} />
-                </button>
-              )}
-              <button
-                onClick={() => { setCartOpen(!cartOpen); setMenuOpen(false); }}
-                className="text-white hover:text-yellow-200 transition relative"
-              >
-                <ShoppingCart size={24} />
-                {cartItems.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItems.length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => { setMenuOpen(!menuOpen); setCartOpen(false); }}
-                className="text-white hover:text-yellow-200 transition"
-              >
-                <Menu size={24} />
-              </button>
-            </div>
+            <button 
+              onClick={() => setShowCheckoutNotification(false)}
+              className="text-white hover:text-gray-200 transition"
+            >
+              <X size={20} />
+            </button>
           </div>
         </div>
+      )}
 
-        {/* Cart Dropdown */}
-        {cartOpen && (
-          <div className="absolute right-4 mt-2 w-80 sm:w-96 rounded-lg shadow-lg z-50" style={{ backgroundColor: '#eab308' }}>
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">Shopping Cart</h2>
-                <button onClick={() => setCartOpen(false)} className="text-gray-800 hover:text-gray-600">
-                  <X size={20} />
+      {/* Navigation Bar */}
+   <nav
+    className="w-full py-3 md:py-4 px-4 md:px-6 flex items-center justify-between"
+    style={{ backgroundColor: '#6b4f4f' }}
+>
+  {/* Left: Logo */}
+    <div className="flex items-center">
+      <div className="w-20 h-20 md:w-12 md:h-12 rounded-lg flex items-center justify-center">
+        <img src="logo.png" alt="Logo" className="object-contain w-full h-full" />
+      </div>
+
+    <span
+      className="ml-2 md:ml-3 text-lg md:text-xl font-bold"
+      style={{ color: "#faf3e0", fontFamily: "Quicksand, sans-serif" }}
+    >
+      BookHive
+    </span>
+  </div>
+
+  {/* Right: Icons */}
+  <div className="flex items-center gap-4">
+    {/* Home Icon */}
+    {currentPage === "userinfo" && (
+      <button
+        onClick={() => setCurrentPage("dashboard")}
+        className="text-white hover:text-yellow-200 transition"
+      >
+        <Home size={24} />
+      </button>
+    )}
+
+    {/* Cart Icon */}
+    <button
+      onClick={() => {
+        setCartOpen(!cartOpen);
+        setMenuOpen(false);
+      }}
+      className="text-white hover:text-yellow-200 transition relative"
+    >
+      <ShoppingCart size={24} />
+      {cartItems.length > 0 && (
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {cartItems.length}
+        </span>
+      )}
+    </button>
+
+    {/* Menu Icon */}
+    <button
+      onClick={() => {
+        setMenuOpen(!menuOpen);
+        setCartOpen(false);
+      }}
+      className="text-white hover:text-yellow-200 transition"
+    >
+      <Menu size={24} />
+    </button>
+  </div>
+</nav>
+
+      {/* Cart Sidebar */}
+      {cartOpen && (
+        <div className="fixed inset-0 z-40 flex justify-end" onClick={() => setCartOpen(false)}>
+          <div 
+            className="h-full w-full max-w-md bg-white shadow-2xl overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Shopping Cart</h2>
+                <button onClick={() => setCartOpen(false)} className="text-gray-600 hover:text-gray-800">
+                  <X size={24} />
                 </button>
               </div>
               
               {cartItems.length === 0 ? (
-                <p className="text-gray-700 text-center py-8">Your cart is empty</p>
+                <p className="text-gray-600 text-center py-8">Your cart is empty</p>
               ) : (
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {cartItems.map(item => (
-                    <div key={item.id} className="bg-white rounded-lg p-3 flex gap-3">
-                      <img src={item.cover} alt={item.title} className="w-16 h-20 object-cover rounded" />
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-sm">{item.title}</h3>
-                        <p className="text-xs text-gray-600">{item.author}</p>
-                        <p className="text-xs text-gray-500">{item.genre}</p>
-                        <p className="text-sm font-bold text-gray-800 mt-1">${item.price}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <button
-                            onClick={() => updateQuantity(item.id, -1)}
-                            className="bg-gray-200 hover:bg-gray-300 rounded p-1"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="text-sm font-semibold">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.id, 1)}
-                            className="bg-gray-200 hover:bg-gray-300 rounded p-1"
-                          >
-                            <Plus size={14} />
-                          </button>
-                          <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="ml-auto text-red-600 hover:text-red-800"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                <>
+                  <div className="space-y-4 mb-6">
+                    {cartItems.map(item => (
+                      <div key={item.id} className="flex gap-4 bg-gray-50 p-4 rounded-lg">
+                        <img src={item.cover} alt={item.title} className="w-20 h-28 object-cover rounded" />
+                        <div className="flex-1">
+                          <h3 className="font-bold text-gray-800 mb-1">{item.title}</h3>
+                          <p className="text-sm text-gray-600 mb-2">{item.author}</p>
+                          <p className="text-lg font-bold text-gray-800 mb-2">${item.price}</p>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => updateQuantity(item.id, -1)}
+                              className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                              <Minus size={16} />
+                            </button>
+                            <span className="px-3 py-1 bg-white rounded">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.id, 1)}
+                              className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                              <Plus size={16} />
+                            </button>
+                            <button
+                              onClick={() => removeFromCart(item.id)}
+                              className="ml-auto p-1 text-red-500 hover:text-red-700"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  <div className="border-t border-gray-300 pt-3 mt-3">
-                    <div className="flex justify-between items-center font-bold text-gray-800">
-                      <span>Total:</span>
-                      <span>${totalPrice.toFixed(2)}</span>
-                    </div>
+                    ))}
                   </div>
-                </div>
+                  
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xl font-bold text-gray-800">Total:</span>
+                      <span className="text-2xl font-bold text-gray-800">${totalPrice.toFixed(2)}</span>
+                    </div>
+                    <button
+                      onClick={handleCheckout}
+                      className="w-full py-3 rounded-lg font-semibold text-white transition"
+                      style={{ backgroundColor: '#6b4f4f' }}
+                      onMouseOver={(e) => e.target.style.opacity = '0.8'}
+                      onMouseOut={(e) => e.target.style.opacity = '1'}
+                    >
+                      Checkout
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Menu Dropdown */}
-        {menuOpen && (
-          <div className="absolute right-4 mt-2 w-64 rounded-lg shadow-lg z-50" style={{ backgroundColor: '#eab308' }}>
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">Menu</h2>
-                <button onClick={() => setMenuOpen(false)} className="text-gray-800 hover:text-gray-600">
-                  <X size={20} />
+      {/* Menu Sidebar */}
+      {menuOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setMenuOpen(false)}>
+          <div 
+            className="absolute right-0 top-0 h-full w-64 bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-800">Menu</h2>
+                <button onClick={() => setMenuOpen(false)} className="text-gray-600 hover:text-gray-800">
+                  <X size={24} />
                 </button>
               </div>
-              <div className="space-y-2">
-                <button className="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg font-semibold text-gray-800 transition">
-                  Transaction History
-                </button>
-                <button className="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg font-semibold text-gray-800 transition">
-                  Personal Library
-                </button>
-                <button 
-                  onClick={() => { setCurrentPage('userinfo'); setMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg font-semibold text-gray-800 transition"
+              <nav className="space-y-4">
+                <button
+                  onClick={() => {
+                    setCurrentPage('dashboard');
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition text-gray-800 font-semibold"
                 >
-                  User Information
+                  Home
                 </button>
-              </div>
+                <button
+                  onClick={() => {
+                    setCurrentPage('userinfo');
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition text-gray-800 font-semibold"
+                >
+                  User Info
+                </button>
+              </nav>
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 px-4 py-8" style={{ backgroundColor: '#faf3e0' }}>
         {currentPage === 'dashboard' ? (
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">Featured Books</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {books.map(book => (
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Featured Books</h2>
+            
+            {/* Search Bar */}
+            <div className="mb-8">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search books by title, author, or genre..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-3 pl-12 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-yellow-500 transition"
+                />
+                <svg 
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" 
+                  width="20" 
+                  height="20" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredBooks.map(book => (
                 <div key={book.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                  <img src={book.cover} alt={book.title} className="w-full h-64 object-cover" />
+                  <img src={book.cover} alt={book.title} className="40-full h-50 object-cover flex items-center justify-center" />
                   <div className="p-5">
                     <h3 className="text-xl font-bold text-gray-800 mb-2">{book.title}</h3>
                     <p className="text-gray-600 text-sm mb-1">by {book.author}</p>
@@ -309,6 +464,12 @@ export default function BookHiveApp() {
                 </div>
               ))}
             </div>
+            
+            {filteredBooks.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-600 text-lg">No books found matching your search.</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="max-w-4xl mx-auto">
