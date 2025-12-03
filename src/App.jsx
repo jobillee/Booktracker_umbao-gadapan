@@ -1,11 +1,13 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import LandingPage from "./pages/LandingPage";
-import UserInformation from './pages/UserInformation';
-import Dashboard from './pages/Dashboard';
-import PersonalLibrary from './pages/PersonalLibrary';
-import BorrowBookRequest from './pages/BorrowRequest';
-import PenaltyTracking from './pages/PenaltyTracker';
+import LandingPage from "./pages/Borrower/LandingPage";
+import UserInformation from './pages/Borrower/UserInformation';
+import Dashboard from './pages/Borrower/Dashboard';
+import PersonalLibrary from './pages/Borrower/PersonalLibrary';
+import BorrowBookRequest from './pages/Borrower/BorrowRequest';
+import PenaltyTracking from './pages/Borrower/PenaltyTracker';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import SalesTransactionPage from './pages/Admin/SalesTransaction';
 
 
 
@@ -20,7 +22,9 @@ function App() {
         <Route path="/personallibrary" element={<PersonalLibrary />} />
         <Route path="/borrowrequest" element={<BorrowBookRequest />} />
         <Route path="/penalty" element={<PenaltyTracking />} />
-        
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/salestransaction" element={<SalesTransactionPage />} />
+
      </Routes>
     </BrowserRouter>
   );
