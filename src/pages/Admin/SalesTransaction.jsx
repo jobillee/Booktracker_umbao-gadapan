@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Bell, Menu, X, Plus, TrendingUp, DollarSign, Package, ShoppingCart, Calendar, User, BookOpen, CheckCircle } from 'lucide-react';
-import AdminHeader from '../../components/AdminHeader';
 
 export default function SalesTransactionPage() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -230,7 +229,115 @@ export default function SalesTransactionPage() {
         </div>
       )}
 
-      <AdminHeader />
+      {/* Navbar */}
+      <nav className="bg-[#6b4f4f] text-white px-6 py-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Logo */}
+          <div className="w-20 h-20 md:w-12 md:h-12 rounded-lg flex items-center justify-center">
+            <img src="logo.png" alt="Logo" className="object-contain w-full h-full" />
+          </div>
+          
+          {/* Right Side Icons */}
+          <div className="flex items-center gap-6">
+            {/* Notification Icon with Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                className="hover:text-[#eab308] transition-colors relative"
+                title="Notifications"
+              >
+                <Bell size={24} />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {isNotificationOpen && (
+                <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl z-50 max-h-[80vh] overflow-y-auto">
+                  <div className="p-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-bold text-[#6b4f4f]">Notifications</h3>
+                      <button onClick={() => setIsNotificationOpen(false)}>
+                        <X size={20} className="text-[#6b4f4f]" />
+                      </button>
+                    </div>
+
+                    {/* Returns Section */}
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-[#6b4f4f] mb-2 flex items-center gap-2">
+                        <BookOpen size={18} />
+                        Book Returns ({returnNotifications.length})
+                      </h4>
+                      {returnNotifications.map(notif => (
+                        <div key={notif.id} className="bg-[#faf3e0] p-3 rounded-lg mb-2">
+                          <p className="font-semibold text-sm text-[#6b4f4f]">{notif.borrowerName}</p>
+                          <p className="text-xs text-gray-600">Book: {notif.bookTitle}</p>
+                          <p className="text-xs text-gray-500">
+                            Borrowed: {notif.borrowDate} | Returned: {notif.returnDate}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Requests Section */}
+                    <div>
+                      <h4 className="font-semibold text-[#6b4f4f] mb-2 flex items-center gap-2">
+                        <User size={18} />
+                        Borrow Requests ({requestNotifications.length})
+                      </h4>
+                      {requestNotifications.map(notif => (
+                        <div key={notif.id} className="bg-[#faf3e0] p-3 rounded-lg mb-2">
+                          <p className="font-semibold text-sm text-[#6b4f4f]">{notif.borrowerName}</p>
+                          <p className="text-xs text-gray-600">Requested: {notif.bookTitle}</p>
+                          <p className="text-xs text-gray-500">Date: {notif.requestDate}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Menu with Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="hover:text-[#eab308] transition-colors"
+                title="Menu"
+              >
+                <Menu size={24} />
+              </button>
+
+              {/* Menu Dropdown */}
+              {isMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-50 overflow-hidden transition-all duration-300">
+                  <button
+                    onClick={() => navigate('Borrowing/Lending Management')}
+                    className="w-full text-left px-4 py-3 text-[#6b4f4f] hover:bg-[#eab308] hover:text-white transition-colors"
+                  >
+                    Borrowing/Lending Management
+                  </button>
+                  <button
+                    onClick={() => navigate('Sales Transaction Management')}
+                    className="w-full text-left px-4 py-3 text-[#6b4f4f] hover:bg-[#eab308] hover:text-white transition-colors"
+                  >
+                    Sales Transaction Management
+                  </button>
+                  <button
+                    onClick={() => navigate('Profile & Account Management')}
+                    className="w-full text-left px-4 py-3 text-[#6b4f4f] hover:bg-[#eab308] hover:text-white transition-colors"
+                  >
+                    Profile & Account Management
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8">
@@ -440,7 +547,7 @@ export default function SalesTransactionPage() {
 
       {/* Footer */}
       <footer className="bg-[#6b4f4f] text-white text-center py-4 mt-8">
-        <p>&copy; 2024 LibraryApp Admin. All rights reserved.</p>
+        <p>&copy; 2025BookHive Admin. All rights reserved.</p>
       </footer>
     </div>
   );
