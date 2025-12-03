@@ -3,7 +3,10 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import LandingPage from "./pages/LandingPage";
 import UserInformation from './pages/UserInformation';
 import Dashboard from './pages/Dashboard';
-import Transactions from './pages/Transactions';
+import PersonalLibrary from './pages/PersonalLibrary';
+import BorrowBookRequest from './pages/BorrowRequest';
+import PenaltyTracking from './pages/PenaltyTracker';
+
 
 
 function App() {
@@ -13,8 +16,11 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/transaction" element={<Transactions />} />
         <Route path="/userinformation" element={<UserInformation />} />
+        <Route path="/personallibrary" element={<PersonalLibrary />} />
+        <Route path="/borrowrequest" element={<BorrowBookRequest />} />
+        <Route path="/penalty" element={<PenaltyTracking />} />
+        
      </Routes>
     </BrowserRouter>
   );
